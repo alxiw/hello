@@ -13,7 +13,7 @@ public class ButtonsUtils {
             "Let's try it, just push the button below";
     public static final String WAITING_TEXT = "⏳ Waiting";
     public static final String ERROR_TEXT = "⚠️ Error";
-    public static final String UNRESPONSIVE_TEXT = "⛔ Jokes are unresponsive, try again later";
+    public static final String UNRESPONSIVE_TEXT = "⛔ Jokes are inaccessible, try again later";
 
     public static List<List<InlineKeyboardButton>> buildKeyboard(List<Integer> config, Button... buttons) {
         int sum = 0;
