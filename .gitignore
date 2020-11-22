@@ -8,3 +8,5 @@
 *.jar
 AppConfig.java
 config.properties
+*.txt
+*.jpg
