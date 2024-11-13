@@ -1,0 +1,13 @@
+---
+meta:
+  environment: jvm
+  toolchain:
+    name: maven
+    version: "1.8"
+build:
+  artifacts:
+    hello.jar: /
+run:
+  jarName: hello.jar
+  persistenceMount: /data
+  containerPort: 80
