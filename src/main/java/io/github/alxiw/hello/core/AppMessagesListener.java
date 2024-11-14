@@ -4,9 +4,12 @@ import com.pengrad.telegrambot.Callback;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Sticker;
+import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SendSticker;
 import com.pengrad.telegrambot.response.SendResponse;
+import io.github.alxiw.hello.data.Joke;
+import io.github.alxiw.hello.data.JokeService;
 import io.github.alxiw.hello.sys.AppLogger;
 
 import java.io.IOException;
@@ -14,9 +17,11 @@ import java.io.IOException;
 public class AppMessagesListener {
 
     private final TelegramBot bot;
+    private final JokeService service;
 
     public AppMessagesListener(TelegramBot bot) {
         this.bot = bot;
+        this.service = new JokeService();
     }
 
     public void onNewMessage(Message message) {
@@ -65,7 +70,16 @@ public class AppMessagesListener {
         //     return;
         // }
 
-        SendResponse response = bot.execute(new SendMessage(chatId, text.trim()));
-        AppLogger.i("response to message with id " + messageId + " is " + response.toString());
+        Joke joke =  service.getRandomJoke();
+        int id = joke.getId();
+        String original = joke.getOriginal();
+        String russian = joke.getRussian();
+        String interpretation = joke.getInterpretation();
+
+        String reply = "*№" + id + "*\n\n" + "`\n" + original + "\n`" + "\n" + "`\n" + russian + "\n`" + "\n\n" + interpretation;
+        SendMessage message = new SendMessage(chatId, reply);
+        message.parseMode(ParseMode.Markdown);
+        SendResponse response = bot.execute(message);
+        AppLogger.i("reply to message with id " + messageId + " is joke with id " + id + ", response is ok – " + response.isOk());
     }
 }
