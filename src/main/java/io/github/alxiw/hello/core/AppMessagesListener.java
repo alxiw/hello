@@ -61,15 +61,9 @@ public class AppMessagesListener {
                 AppLogger.e(e, "error occurred while sending response to message with id " + messageId);
             }
         });
-
     }
 
     private void onTextMessage(String text, long messageId, long chatId) {
-        // if (content.startsWith("/start")) {
-        //     AppLogger.i("received message is command: " + content);
-        //     return;
-        // }
-
         Joke joke =  service.getRandomJoke();
         int id = joke.getId();
         String original = joke.getOriginal();

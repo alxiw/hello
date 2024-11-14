@@ -9,16 +9,16 @@ import java.util.List;
 
 public class AppUpdatesListener implements UpdatesListener {
 
-    private final TelegramBot bot;
+    private final AppMessagesListener listener;
 
     public AppUpdatesListener(TelegramBot bot) {
-        this.bot = bot;
+        this.listener = new AppMessagesListener(bot);
     }
 
     @Override
     public int process(List<Update> updates) {
         AppLogger.i("received updates size: " + updates.size());
-        updates.forEach(update -> accept(update, new AppMessagesListener(bot)));
+        updates.forEach(update -> accept(update, listener));
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
 
