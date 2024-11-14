@@ -3,7 +3,7 @@ meta:
   environment: jvm
   toolchain:
     name: maven
-    version: "1.8"
+    version: 8
 build:
   artifacts:
     hello.jar: /
