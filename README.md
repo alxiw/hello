@@ -1,6 +1,8 @@
 # Hello
 
-Lorem Ipsum
+```
+java -jar hello.jar
+```
 
 ## License
 

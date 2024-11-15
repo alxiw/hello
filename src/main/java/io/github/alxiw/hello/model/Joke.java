@@ -1,4 +1,4 @@
-package io.github.alxiw.hello.data;
+package io.github.alxiw.hello.model;
 
 public class Joke {
 
