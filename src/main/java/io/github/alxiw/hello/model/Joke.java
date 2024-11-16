@@ -7,6 +7,13 @@ public class Joke {
     private String russian;
     private String interpretation;
 
+    public Joke(int id, String original, String russian, String interpretation) {
+        this.id = id;
+        this.original = original;
+        this.russian = russian;
+        this.interpretation = interpretation;
+    }
+
     public int getId() {
         return id;
     }

@@ -1,10 +1,10 @@
-package io.github.alxiw.hello.data;
+package io.github.alxiw.hello.service;
 
 import io.github.alxiw.hello.model.Sticker;
 
 import java.util.List;
 
-interface StickerDao {
+public interface StickerDao {
 
     int addSticker (String fileId, String emoji);
 

@@ -1,5 +1,6 @@
-package io.github.alxiw.hello.data;
+package io.github.alxiw.hello.service;
 
+import io.github.alxiw.hello.data.StickerDaoImpl;
 import io.github.alxiw.hello.model.Sticker;
 
 import java.util.List;

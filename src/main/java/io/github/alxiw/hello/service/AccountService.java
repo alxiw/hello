@@ -1,5 +1,6 @@
-package io.github.alxiw.hello.data;
+package io.github.alxiw.hello.service;
 
+import io.github.alxiw.hello.data.AccountDaoImpl;
 import io.github.alxiw.hello.model.Account;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class AccountService {
     private AccountService() {
         this.accountDao = new AccountDaoImpl();
     }
+
     public Response addAccount(String uin, String name) {
         return getResponse(accountDao.addAccount(uin, name));
     }

@@ -1,10 +1,10 @@
-package io.github.alxiw.hello.data;
+package io.github.alxiw.hello.service;
 
 import io.github.alxiw.hello.model.Account;
 
 import java.util.List;
 
-interface AccountDao {
+public interface AccountDao {
 
     int addAccount(String uin, String name);
 

@@ -1,16 +1,17 @@
 package io.github.alxiw.hello.data;
 
 import io.github.alxiw.hello.model.Sticker;
+import io.github.alxiw.hello.service.StickerDao;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.github.alxiw.hello.data.Constants.DB_URL;
+import static io.github.alxiw.hello.data.Const.DB_URL;
 
-class StickerDaoImpl implements StickerDao {
+public class StickerDaoImpl implements StickerDao {
 
-    StickerDaoImpl() {
+    public StickerDaoImpl() {
         // do nothing
     }
 

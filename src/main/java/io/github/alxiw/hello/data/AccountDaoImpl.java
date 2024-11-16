@@ -1,16 +1,17 @@
 package io.github.alxiw.hello.data;
 
 import io.github.alxiw.hello.model.Account;
+import io.github.alxiw.hello.service.AccountDao;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.github.alxiw.hello.data.Constants.DB_URL;
+import static io.github.alxiw.hello.data.Const.DB_URL;
 
-class AccountDaoImpl implements AccountDao {
+public class AccountDaoImpl implements AccountDao {
 
-    AccountDaoImpl() {
+    public AccountDaoImpl() {
         // do nothing
     }
 

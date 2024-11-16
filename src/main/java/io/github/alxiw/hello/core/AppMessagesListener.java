@@ -2,20 +2,19 @@ package io.github.alxiw.hello.core;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Message;
+import com.pengrad.telegrambot.model.MessageReactionCountUpdated;
+import com.pengrad.telegrambot.model.MessageReactionUpdated;
 import com.pengrad.telegrambot.model.Sticker;
 import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SendSticker;
 import com.pengrad.telegrambot.response.SendResponse;
-import io.github.alxiw.hello.data.AccountService;
-import io.github.alxiw.hello.data.Response;
-import io.github.alxiw.hello.data.StickerService;
+import io.github.alxiw.hello.service.AccountService;
+import io.github.alxiw.hello.service.Response;
+import io.github.alxiw.hello.service.StickerService;
 import io.github.alxiw.hello.model.Joke;
-import io.github.alxiw.hello.data.JokeService;
+import io.github.alxiw.hello.service.JokeService;
 import io.github.alxiw.hello.sys.AppLogger;
-
-import java.io.IOException;
-import java.util.List;
 
 public class AppMessagesListener {
 
@@ -33,7 +32,7 @@ public class AppMessagesListener {
         this.stickerService = StickerService.getInstance();
     }
 
-    private String gatName(String fn, String ln) {
+    private String getName(String fn, String ln) {
         String first = fn.trim();
         String last = ln.trim();
         if (first.isEmpty() && last.isEmpty()) {
@@ -52,7 +51,7 @@ public class AppMessagesListener {
     public void onNewMessage(Message message) {
         long messageId = message.messageId();
         long chatId = message.chat().id();
-        String name = gatName(message.chat().firstName(), message.chat().lastName());
+        String name = getName(message.chat().firstName(), message.chat().lastName());
         AppLogger.i("new message, chat: " + message.chat().id());
         if (accountService.getAllAccounts().stream().noneMatch(item -> item.getUin().equals(String.valueOf(chatId)))
                 && accountService.addAccount(String.valueOf(chatId), name) == Response.SUCCESS) {
@@ -103,5 +102,13 @@ public class AppMessagesListener {
         message.parseMode(ParseMode.Markdown);
         SendResponse response = bot.execute(message);
         AppLogger.i("reply to message with id " + messageId + " is joke with id " + id + ", response is ok – " + response.isOk());
+    }
+
+    public void onMessageReaction(MessageReactionUpdated messageReactionUpdated) {
+        AppLogger.i("MessageReactionUpdated, chat:" + messageReactionUpdated.chat().id());
+    }
+
+    public void onMessageReactionCount(MessageReactionCountUpdated messageReactionCountUpdated) {
+        AppLogger.i("MessageReactionCountUpdated, chat:" + messageReactionCountUpdated.chat().id());
     }
 }

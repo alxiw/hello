@@ -27,6 +27,10 @@ public class AppUpdatesListener implements UpdatesListener {
             appMessagesListener.onNewMessage(update.message());
         } else if (update.editedMessage() != null) {
             appMessagesListener.onEditedMessage(update.message());
+        } else if (update.messageReaction() != null) {
+            appMessagesListener.onMessageReaction(update.messageReaction());
+        } else if (update.messageReactionCount() != null) {
+            appMessagesListener.onMessageReactionCount(update.messageReactionCount());
         } else {
             AppLogger.i("unknown update: " + update);
         }
