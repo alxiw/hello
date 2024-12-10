@@ -1,10 +1,7 @@
-package io.github.alxiw.hello.service;
+package io.github.alxiw.hello.service.joke
 
-import io.github.alxiw.hello.model.Joke;
+import io.github.alxiw.hello.model.Joke
 
-import java.util.List;
-
-public interface JokeDao {
-
-    List<Joke> getAllJokes();
+interface JokeDao {
+    fun getAllJokes(): List<Joke>?
 }

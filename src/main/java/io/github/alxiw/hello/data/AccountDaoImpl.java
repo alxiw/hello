@@ -1,7 +1,8 @@
 package io.github.alxiw.hello.data;
 
 import io.github.alxiw.hello.model.Account;
-import io.github.alxiw.hello.service.AccountDao;
+import io.github.alxiw.hello.service.account.AccountDao;
+import io.github.alxiw.hello.sys.AppLogger;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class AccountDaoImpl implements AccountDao {
             pstmt.setString(2, name);
             return pstmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            AppLogger.e(e);
         }
 
         return -1;
@@ -49,7 +50,7 @@ public class AccountDaoImpl implements AccountDao {
                 );
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            AppLogger.e(e);
         }
         return null;
     }
@@ -72,7 +73,7 @@ public class AccountDaoImpl implements AccountDao {
                 users.add(account);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            AppLogger.e(e);
         }
 
         return users;
@@ -91,7 +92,7 @@ public class AccountDaoImpl implements AccountDao {
 
             return pstmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            AppLogger.e(e);
         }
 
         return -1;
@@ -108,7 +109,7 @@ public class AccountDaoImpl implements AccountDao {
 
             return pstmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            AppLogger.e(e);
         }
 
         return -1;

@@ -1,4 +1,4 @@
-package io.github.alxiw.hello.service;
+package io.github.alxiw.hello.service.account;
 
 import io.github.alxiw.hello.model.Account;
 

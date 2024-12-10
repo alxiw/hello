@@ -1,4 +1,4 @@
-package io.github.alxiw.hello.service;
+package io.github.alxiw.hello.service.sticker;
 
 import io.github.alxiw.hello.model.Sticker;
 

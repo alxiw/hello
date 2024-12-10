@@ -1,6 +1,6 @@
-package io.github.alxiw.hello.service;
+package io.github.alxiw.hello.service
 
-public enum Response {
+enum class Response {
     SUCCESS,
     NO_CHANGES,
     ERROR

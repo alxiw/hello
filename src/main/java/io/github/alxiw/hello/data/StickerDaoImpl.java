@@ -1,7 +1,8 @@
 package io.github.alxiw.hello.data;
 
 import io.github.alxiw.hello.model.Sticker;
-import io.github.alxiw.hello.service.StickerDao;
+import io.github.alxiw.hello.service.sticker.StickerDao;
+import io.github.alxiw.hello.sys.AppLogger;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -18,15 +19,14 @@ public class StickerDaoImpl implements StickerDao {
     @Override
     public int addSticker(String fileId, String emoji) {
         String sql = "INSERT INTO stickers (file_id, emoji) VALUES (?, ?)";
-        try (
-                Connection connection = DriverManager.getConnection(DB_URL);
-                PreparedStatement pstmt = connection.prepareStatement(sql)
+        try (Connection connection = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = connection.prepareStatement(sql)
         ) {
             pstmt.setString(1, fileId);
             pstmt.setString(2, emoji);
             return pstmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            AppLogger.e(e);
         }
 
         return -1;
@@ -49,7 +49,7 @@ public class StickerDaoImpl implements StickerDao {
                 );
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            AppLogger.e(e);
         }
         return null;
     }
@@ -72,7 +72,7 @@ public class StickerDaoImpl implements StickerDao {
                 stickers.add(sticker);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            AppLogger.e(e);
         }
 
         return stickers;
@@ -91,7 +91,7 @@ public class StickerDaoImpl implements StickerDao {
 
             return pstmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            AppLogger.e(e);
         }
 
         return -1;
@@ -108,7 +108,7 @@ public class StickerDaoImpl implements StickerDao {
 
             return pstmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            AppLogger.e(e);
         }
 
         return -1;

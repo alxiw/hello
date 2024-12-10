@@ -1,7 +1,8 @@
-package io.github.alxiw.hello.service;
+package io.github.alxiw.hello.service.sticker;
 
 import io.github.alxiw.hello.data.StickerDaoImpl;
 import io.github.alxiw.hello.model.Sticker;
+import io.github.alxiw.hello.service.Response;
 
 import java.util.List;
 import java.util.Random;
