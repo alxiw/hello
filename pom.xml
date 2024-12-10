@@ -89,7 +89,7 @@
                     <appendAssemblyId>false</appendAssemblyId>
                     <archive>
                         <manifest>
-                            <mainClass>io.github.alxiw.hello.App</mainClass>
+                            <mainClass>io.github.alxiw.hello.AppKt</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
