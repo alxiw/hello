@@ -1,6 +1,6 @@
-package io.github.alxiw.hello.api
+package io.github.alxiw.hello.service.google
 
-import io.github.alxiw.hello.model.Language
+import io.github.alxiw.hello.sys.Language
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.GET

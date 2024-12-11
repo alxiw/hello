@@ -1,61 +1,43 @@
-package io.github.alxiw.hello.service.account;
+package io.github.alxiw.hello.service.account
 
-import io.github.alxiw.hello.data.AccountDaoImpl;
-import io.github.alxiw.hello.model.Account;
-import io.github.alxiw.hello.service.Response;
+import io.github.alxiw.hello.data.AccountDao
+import io.github.alxiw.hello.data.model.Account
+import io.github.alxiw.hello.sys.Response
+import io.github.alxiw.hello.sys.Utils.getDatabaseResponse
+import kotlin.concurrent.Volatile
 
-import java.util.List;
+class AccountService private constructor() {
 
-public class AccountService {
+    private val accountDao: IAccountDao = AccountDao()
 
-    private static volatile AccountService instance;
-
-    public static AccountService getInstance() {
-        // Первый проверка (не блокирующая)
-        if (instance == null) {
-            synchronized (AccountService.class) {
-                // Второй проверка (блокирующая)
-                if (instance == null) {
-                    instance = new AccountService();
-                }
-            }
-        }
-        return instance;
+    fun addAccount(uin: String, name: String): Response {
+        return getDatabaseResponse(accountDao.addAccount(uin, name))
     }
 
-    private final AccountDao accountDao;
-
-    private AccountService() {
-        this.accountDao = new AccountDaoImpl();
+    fun getAccountById(id: Int): Account? {
+        return accountDao.getAccountById(id)
     }
 
-    public Response addAccount(String uin, String name) {
-        return getResponse(accountDao.addAccount(uin, name));
+    fun getAllAccounts(): List<Account> {
+        return accountDao.getAllAccounts()
     }
 
-    public Account getAccountById(int id) {
-        return accountDao.getAccountById(id);
+    fun updateAccount(account: Account): Response {
+        return getDatabaseResponse(accountDao.updateAccount(account))
     }
 
-    public List<Account> getAllAccounts() {
-        return accountDao.getAllAccounts();
+    fun deleteAccount(id: Int): Response {
+        return getDatabaseResponse(accountDao.deleteAccount(id))
     }
 
-    public Response updateAccount(Account account) {
-        return getResponse(accountDao.updateAccount(account));
-    }
+    companion object {
 
-    public Response deleteAccount(int id) {
-        return getResponse(accountDao.deleteAccount(id));
-    }
+        @Volatile
+        private var instance: AccountService? = null
 
-    private Response getResponse(int value) {
-        if (value <= -1) {
-            return Response.ERROR;
-        } else if (value == 0) {
-            return Response.NO_CHANGES;
-        } else {
-            return Response.SUCCESS;
+        @JvmStatic
+        fun getInstance(): AccountService {
+            return instance ?: AccountService().also { instance = it }
         }
     }
 }

@@ -1,18 +1,11 @@
-package io.github.alxiw.hello.service.sticker;
+package io.github.alxiw.hello.service.sticker
 
-import io.github.alxiw.hello.model.Sticker;
+import io.github.alxiw.hello.data.model.Sticker
 
-import java.util.List;
-
-public interface StickerDao {
-
-    int addSticker (String fileId, String emoji);
-
-    Sticker getStickerById(int id);
-
-    List<Sticker> getAllStickers();
-
-    int updateSticker(Sticker sticker);
-
-    int deleteSticker(int id);
+interface IStickerDao {
+    fun addSticker(fileId: String, emoji: String): Int
+    fun getStickerById(id: Int): Sticker?
+    fun getAllStickers(): List<Sticker>
+    fun updateSticker(sticker: Sticker): Int
+    fun deleteSticker(id: Int): Int
 }

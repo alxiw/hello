@@ -1,7 +1,7 @@
 package io.github.alxiw.hello.service.joke
 
-import io.github.alxiw.hello.model.Joke
+import io.github.alxiw.hello.data.model.Joke
 
-interface JokeDao {
+interface IJokeDao {
     fun getAllJokes(): List<Joke>?
 }

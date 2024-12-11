@@ -1,4 +1,4 @@
-package io.github.alxiw.hello.api
+package io.github.alxiw.hello.service.google
 
 import io.github.alxiw.hello.sys.AppLogger
 import okhttp3.OkHttpClient

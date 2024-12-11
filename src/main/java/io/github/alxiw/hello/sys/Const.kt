@@ -1,4 +1,4 @@
-package io.github.alxiw.hello.data
+package io.github.alxiw.hello.sys
 
 internal object Const {
     const val DATA_DIR = "/data/"

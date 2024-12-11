@@ -1,4 +1,4 @@
-package io.github.alxiw.hello.model
+package io.github.alxiw.hello.sys
 
 enum class Language(val code: String) {
     EN("en"),
@@ -25,7 +25,11 @@ enum class Language(val code: String) {
 
     companion object {
         fun fromCode(code: String): Language? {
-            return Language.entries.find { it.code.equals(code, ignoreCase = true) }
+            return Language.entries.filter {
+                it.code != "en-GB" && it.code != "en-US"
+            }.find {
+                it.code.equals(code, ignoreCase = true)
+            }
         }
     }
 }

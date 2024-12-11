@@ -1,4 +1,4 @@
-package io.github.alxiw.hello.service
+package io.github.alxiw.hello.sys
 
 enum class Response {
     SUCCESS,

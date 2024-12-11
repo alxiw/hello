@@ -1,77 +1,53 @@
-package io.github.alxiw.hello.service.sticker;
+package io.github.alxiw.hello.service.sticker
 
-import io.github.alxiw.hello.data.StickerDaoImpl;
-import io.github.alxiw.hello.model.Sticker;
-import io.github.alxiw.hello.service.Response;
+import io.github.alxiw.hello.data.StickerDao
+import io.github.alxiw.hello.data.model.Sticker
+import io.github.alxiw.hello.sys.Response
+import io.github.alxiw.hello.sys.Utils.getDatabaseResponse
+import kotlin.concurrent.Volatile
+import kotlin.random.Random
 
-import java.util.List;
-import java.util.Random;
+class StickerService private constructor() {
 
-public class StickerService {
+    private val stickerDao: IStickerDao = StickerDao()
 
-    private static volatile StickerService instance;
-
-    public static StickerService getInstance() {
-        // Первый проверка (не блокирующая)
-        if (instance == null) {
-            synchronized (StickerService.class) {
-                // Второй проверка (блокирующая)
-                if (instance == null) {
-                    instance = new StickerService();
-                }
-            }
-        }
-        return instance;
+    fun addSticker(fileId: String, emoji: String): Response {
+        return getDatabaseResponse(stickerDao.addSticker(fileId, emoji))
     }
 
-    private final StickerDao stickerDao;
-
-    private StickerService() {
-        this.stickerDao = new StickerDaoImpl();
+    fun getStickerById(id: Int): Sticker? {
+        return stickerDao.getStickerById(id)
     }
 
-    public Response addSticker(String fileId, String emoji) {
-        return getResponse(stickerDao.addSticker(fileId, emoji));
+    fun getAllStickers(): List<Sticker> {
+        return stickerDao.getAllStickers()
     }
 
-    public Sticker getStickerById(int id) {
-        return stickerDao.getStickerById(id);
+    fun updateSticker(account: Sticker): Response {
+        return getDatabaseResponse(stickerDao.updateSticker(account))
     }
 
-    public List<Sticker> getAllStickers() {
-        return stickerDao.getAllStickers();
+    fun deleteSticker(id: Int): Response {
+        return getDatabaseResponse(stickerDao.deleteSticker(id))
     }
 
-    public Response updateSticker(Sticker account) {
-        return getResponse(stickerDao.updateSticker(account));
-    }
-
-    public Response deleteSticker(int id) {
-        return getResponse(stickerDao.deleteSticker(id));
-    }
-
-    public String getRandomSticker(String fileId) {
-        List<Sticker> stickers = stickerDao.getAllStickers();
+    fun getRandomSticker(fileId: String): String {
+        val stickers = stickerDao.getAllStickers()
         if (stickers.isEmpty()) {
-            return fileId;
+            return fileId
         }
 
-        Random random = new Random();
-        int min = 1;
-        int max = stickers.size();
-        int randomNumber = random.nextInt(max - min) + min;
-        Sticker sticker = stickers.get(randomNumber - 1);
-
-        return sticker.getFileId();
+        return stickers[Random.nextInt(0, stickers.size)].fileId
     }
 
-    private Response getResponse(int value) {
-        if (value <= -1) {
-            return Response.ERROR;
-        } else if (value == 0) {
-            return Response.NO_CHANGES;
-        } else {
-            return Response.SUCCESS;
+    companion object {
+
+        @Volatile
+        private var instance: StickerService? = null
+
+        @JvmStatic
+        fun getInstance(): StickerService {
+            return instance ?: StickerService().also { instance = it }
         }
     }
 }
