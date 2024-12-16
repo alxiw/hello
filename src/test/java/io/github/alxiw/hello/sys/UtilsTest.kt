@@ -10,26 +10,26 @@ class UtilsTest {
     @Test
     fun `check language`() {
         val inputs = listOf<Pair<String, Language?>>(
-            Pair("\$ abc", Language.EN),
-            Pair("\$", Language.EN),
-            Pair("\$ ru", Language.EN),
-            Pair("\$en", Language.EN),
-            Pair("\$xz", null),
-            Pair("__\$", null),
-            Pair(" \$ ru", Language.EN),
-            Pair("\$\$\$ hello", null),
-            Pair("\$70", null),
-            Pair("  .\$.  ", null),
-            Pair("\$en-GB", null),
-            Pair("\$en-US", null),
-            Pair("\$uk", Language.UK),
-            Pair("\$us", Language.US),
-            Pair("\$de", Language.DE),
-            Pair("\$pl", Language.PL),
-            Pair("\$ja", Language.JA),
+            Pair(" ", Language.EN),
+            Pair("", Language.EN),
+            Pair(" ru", Language.EN),
+            Pair("en", Language.EN),
+            Pair("xz", null),
+            Pair("__", null),
+            Pair("  ru", Language.EN),
+            Pair(" hello", Language.EN),
+            Pair("70", null),
+            Pair("  ..  ", Language.EN),
+            Pair("en-GB", null),
+            Pair("en-US", null),
+            Pair("uk", Language.UK),
+            Pair("us", Language.US),
+            Pair("de", Language.DE),
+            Pair("pl", Language.PL),
+            Pair("ja", Language.JA),
         )
         inputs.forEachIndexed { index, input ->
-            val cmd = input.first.trim().split(" ")[0]
+            val cmd = input.first.split(" ")[0]
             val lang = Utils.checkLanguage(cmd)
             assertEquals("items indexed $index are not equals", input.second, lang)
         }

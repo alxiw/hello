@@ -1,10 +1,13 @@
 # Hello
 
-Telegram Bot, try it [here](https://t.me/rxjavabot) or run it locally with your own bot token
+Telegram Bot that offers four main features:
 
-```
-java -jar hello.jar
-```
+* 📢 Text-to-Speech
+* 🌎 Translation
+* 😂 Send jokes from local storage
+* 🪄 Send stickers from local storage and add new ones
+
+Feel free to explore these features and enhance your interaction with the bot [here](https://t.me/rxjavabot)!
 
 ## Technologies
 

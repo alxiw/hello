@@ -21,6 +21,7 @@ import io.github.alxiw.hello.sys.Language
 import io.github.alxiw.hello.sys.AppLogger
 import io.github.alxiw.hello.sys.Utils.checkLanguage
 import io.github.alxiw.hello.sys.Utils.makeUpName
+import io.github.alxiw.hello.sys.Utils.parseTranslateResponse
 import io.github.alxiw.hello.sys.isOk
 import org.apache.commons.io.IOUtils
 import java.io.File
@@ -52,7 +53,7 @@ class MessageController(private val bot: TelegramBot) {
                 AppLogger.i("received message $messageId has text – $text")
                 when {
                     text.startsWith("/start") -> onStartCommand(message)
-                    text.startsWith("$") -> onTextToSpeech(text, messageId, chatId)
+                    text.startsWith("$") -> onTranslate(text, messageId, chatId)
                     else -> onTextMessage(messageId, chatId)
                 }
             }
@@ -114,16 +115,21 @@ class MessageController(private val bot: TelegramBot) {
         val chatId = message.chat().id()
         val author = makeUpName(message.chat())
         val text = "\uD83D\uDC4B *Hi $author!*\n\n" +
-                "I can currently do 3 things:\n\n" +
+                "I can currently do 4 things:\n\n" +
                 "\uD83D\uDCE2 *Text-to-speech:* " +
                 "Send me a message starting with \$ (e.g., \$ hello world) and I'll read it " +
                 "aloud. The default language is English, but you can specify a different language by adding a " +
                 "two-letter language code after \$ (e.g., \$ru доброго здравия).\n\n" +
+                "\uD83C\uDF0E *Translation:* " +
+                "In a similar way send me a message starting with the following format: \"\$en-ru\". " +
+                "This indicates that you want to translate from English to Russian " +
+                "(e.g., \$en-ru the quick brown fox jumps over the lazy dog). " +
+                "I will then provide you with the translation.\n\n" +
                 "\uD83D\uDE02 *Jokes:* " +
                 "For any other text message, I'll send you a random joke from my database.\n\n" +
                 "\uD83E\uDE84 *Stickers:* " +
                 "If you send me a sticker, I'll reply with a random sticker from my database.\n\n" +
-                "*P.S.* \uD83D\uDCAC Supported languages: en or uk – English UK (or by default without suffix), " +
+                "*P.S.* \uD83D\uDCAC Supported languages: en or uk – English UK, " +
                 "us – English US, ru – Russian, de – German, fr – French, es – Spanish, it – Italian, " +
                 "pt – Portuguese, nl – Dutch, sv – Swedish, pl – Polish, cs – Czech, ar – Arabic, tr – Turkish, " +
                 "zh – Simplified Chinese, ja – Japanese.\n"
@@ -157,16 +163,39 @@ class MessageController(private val bot: TelegramBot) {
         AppLogger.i("reply to message with id " + messageId + " is sticker with id " + respStickerId + ", response is ok – " + response.isOk)
     }
 
-    private fun onTextToSpeech(text: String, messageId: Long, chatId: Long) {
+    private fun onTranslate(text: String, messageId: Long, chatId: Long) {
         val cmd = text.trim().split(" ")[0]
-        checkLanguage(cmd)?.let {
+        val lang = cmd.replaceFirst("$", "")
+        if (lang.contains("-")) {
+            val pair = lang.split("-")
+            if (pair.size != 2) {
+                val text = "\uD83E\uDEE5 More than 2 language codes, please try again"
+                val message = SendMessage(chatId, text)
+                val response = bot.execute<SendMessage, SendResponse>(message)
+                AppLogger.i("reply to message with id " + messageId + ", response is ok – " + response.isOk)
+                return
+            }
+            val sl = checkLanguage(pair[0])
+            val tl = checkLanguage(pair[1])
+            if (sl == null || tl == null) {
+                val text = "\uD83E\uDEE5 Language codes are incorrect or not supported, please try again"
+                val message = SendMessage(chatId, text)
+                val response = bot.execute<SendMessage, SendResponse>(message)
+                AppLogger.i("reply to message with id " + messageId + ", response is ok – " + response.isOk)
+                return
+            }
             val content = text.replace(cmd, "").trim()
-            convertTextToSpeech(content, it, messageId, chatId)
-        } ?: run {
-            val text = "\uD83E\uDEE5 Language code is incorrect or not supported, please try another one"
-            val message = SendMessage(chatId, text)
-            val response = bot.execute<SendMessage, SendResponse>(message)
-            AppLogger.i("reply to message with id " + messageId + ", response is ok – " + response.isOk)
+            translate(content, sl, tl, messageId, chatId)
+        } else {
+            checkLanguage(lang)?.let {
+                val content = text.replace(cmd, "").trim()
+                convertTextToSpeech(content, it, messageId, chatId)
+            } ?: run {
+                val text = "\uD83E\uDEE5 Language code is incorrect or not supported, please try another one"
+                val message = SendMessage(chatId, text)
+                val response = bot.execute<SendMessage, SendResponse>(message)
+                AppLogger.i("reply to message with id " + messageId + ", response is ok – " + response.isOk)
+            }
         }
     }
 
@@ -179,7 +208,7 @@ class MessageController(private val bot: TelegramBot) {
             return
         }
 
-        val request = googleService.convert(lang = lang.code, query = content)
+        val request = googleService.tts(lang = lang.code, query = content)
         val response = request.execute()
         val body = response.body()
         if (response.isSuccessful && body != null) {
@@ -211,6 +240,28 @@ class MessageController(private val bot: TelegramBot) {
             val message = SendMessage(chatId, text)
             val resp = bot.execute(message)
 
+            AppLogger.i("reply to message with id $messageId is error text message, response is ok – " + resp.isOk)
+        }
+    }
+
+    private fun translate(content: String, source: Language, target: Language, messageId: Long, chatId: Long) {
+        if (content.isBlank()) {
+            val text = "\uD83E\uDEE5 Message for translation is empty"
+            val message = SendMessage(chatId, text)
+            val response = bot.execute<SendMessage, SendResponse>(message)
+            AppLogger.i("reply to message with id " + messageId + ", response is ok – " + response.isOk)
+            return
+        }
+
+        val request = googleService.translate(sourceLang = source.code, targetLang = target.code, query = content)
+        request.execute().body()?.string()?.let { parseTranslateResponse(it) }?.let { pair ->
+            val message = SendMessage(chatId, pair.second)
+            val resp = bot.execute(message)
+            AppLogger.i("reply to message with id $messageId is text message, response is ok – " + resp.isOk)
+        } ?: run {
+            val text = "\uD83D\uDC7E Oops, error, most likely the text exceeds limits..."
+            val message = SendMessage(chatId, text)
+            val resp = bot.execute(message)
             AppLogger.i("reply to message with id $messageId is error text message, response is ok – " + resp.isOk)
         }
     }

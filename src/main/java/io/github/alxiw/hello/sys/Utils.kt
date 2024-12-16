@@ -7,12 +7,12 @@ object Utils {
 
     fun checkLanguage(cmd: String): Language? {
         when (cmd.lowercase()) {
-            "$" -> return Language.EN
-            "\$uk" -> return Language.UK
-            "\$us" -> return Language.US
+            "" -> return Language.EN
+            "uk" -> return Language.UK
+            "us" -> return Language.US
         }
 
-        return fromCode(cmd.replace("$", ""))
+        return fromCode(cmd)
     }
 
     fun makeUpName(chat: Chat): String {
@@ -38,6 +38,17 @@ object Utils {
             return Response.NO_CHANGES
         } else {
             return Response.SUCCESS
+        }
+    }
+
+    fun parseTranslateResponse(responseString: String): Pair<String, String>? {
+        if (responseString.startsWith("[[[")) {
+            val array = responseString.replaceFirst("[[[", "").split("\",")
+            val target = array[0].replaceFirst("\"", "").replace("\\\"", "\"")
+            val source = array[1].replaceFirst("\"", "")
+            return Pair<String, String>(source, target)
+        } else {
+            return null
         }
     }
 }
