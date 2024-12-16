@@ -254,8 +254,8 @@ class MessageController(private val bot: TelegramBot) {
         }
 
         val request = googleService.translate(sourceLang = source.code, targetLang = target.code, query = content)
-        request.execute().body()?.string()?.let { parseTranslateResponse(it) }?.let { pair ->
-            val message = SendMessage(chatId, pair.second)
+        request.execute().body()?.string()?.let { parseTranslateResponse(it) }?.let { result ->
+            val message = SendMessage(chatId, result)
             val resp = bot.execute(message)
             AppLogger.i("reply to message with id $messageId is text message, response is ok – " + resp.isOk)
         } ?: run {

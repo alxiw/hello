@@ -1,5 +1,7 @@
 package io.github.alxiw.hello.sys
 
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.pengrad.telegrambot.model.Chat
 import io.github.alxiw.hello.sys.Language.Companion.fromCode
 
@@ -41,14 +43,21 @@ object Utils {
         }
     }
 
-    fun parseTranslateResponse(responseString: String): Pair<String, String>? {
-        if (responseString.startsWith("[[[")) {
-            val array = responseString.replaceFirst("[[[", "").split("\",")
-            val target = array[0].replaceFirst("\"", "").replace("\\\"", "\"")
-            val source = array[1].replaceFirst("\"", "")
-            return Pair<String, String>(source, target)
-        } else {
-            return null
+    fun parseTranslateResponse(responseString: String): String? {
+        val gson = Gson()
+        val type = object : TypeToken<List<Any?>>() {}.type
+        val parsedData: List<Any?> = gson.fromJson(responseString, type)
+        if (parsedData.isEmpty()) return null
+        val list = parsedData[0]
+        if (list !is List<*> || list.isEmpty()) return null
+        val result = StringBuilder()
+        list.forEach {
+            if (it !is List<*>) return@forEach
+            if (it.isEmpty()) return@forEach
+            val chunk = it[0]
+            if (chunk !is String) return@forEach
+            result.append(chunk)
         }
+        return result.toString()
     }
 }

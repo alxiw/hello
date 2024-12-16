@@ -19,15 +19,35 @@ interface GoogleService {
      * [
      * 	[
      * 		[
-     * 			"кот",
-     * 			"cat",
+     * 			"Hello! ",
+     * 			"Здравствуйте! ",
      * 			null,
      * 			null,
      * 			10
+     * 		],
+     * 		[
+     * 			"My name is Uncle Vasya! ",
+     * 			"Меня зовут Дядя Вася! ",
+     * 			null,
+     * 			null,
+     * 			3,
+     * 			null,
+     * 			null,
+     * 			[
+     * 				[]
+     * 			],
+     * 			[
+     * 				[
+     * 					[
+     * 						"e38d47a4f17c466dfca5ed67f09b5027",
+     * 						"ru_en_2023q1.md"
+     * 					]
+     * 				]
+     * 			]
      * 		]
      * 	],
      * 	null,
-     * 	"en",
+     * 	"ru",
      * 	null,
      * 	null,
      * 	null,

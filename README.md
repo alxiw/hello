@@ -11,6 +11,7 @@ Feel free to explore these features and enhance your interaction with the bot [h
 
 ## Technologies
 
+* [Kotlin](https://github.com/JetBrains/kotlin) 2.1.0
 * [Java Telegram Bot API](https://github.com/pengrad/java-telegram-bot-api) 7.11.0
 * [Retrofit](https://github.com/square/retrofit) and [Gson Converter](https://github.com/square/retrofit/tree/master/retrofit-converters/gson) 2.10.0
 * [OkHttp Logging Interceptor](https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor) 3.14.8
